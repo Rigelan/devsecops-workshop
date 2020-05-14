@@ -224,7 +224,7 @@ objects:
     maven-template: |-
       <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
         <inheritFrom></inheritFrom>
-        <name>maven</name>
+        <name>maven-old</name>
         <privileged>false</privileged>
         <alwaysPullImage>false</alwaysPullImage>
         <instanceCap>2147483647</instanceCap>
@@ -283,109 +283,109 @@ objects:
             oc set resources dc/jenkins --limits=memory=1Gi --requests=memory=512Mi
             oc label dc jenkins app=jenkins --overwrite
 
-            HOSTNAME=$(oc get route jenkins -o template --template='{{.spec.host}}' | sed "s/jenkins-${CICD_NAMESPACE}.//g")
-            GOGS_HOSTNAME="gogs-$CICD_NAMESPACE.$HOSTNAME"
+            #HOSTNAME=$(oc get route jenkins -o template --template='{{.spec.host}}' | sed "s/jenkins-${CICD_NAMESPACE}.//g")
+            #GOGS_HOSTNAME="gogs-$CICD_NAMESPACE.$HOSTNAME"
 
-            if [ "${EPHEMERAL}" == "true" ] ; then
-              oc new-app -f https://raw.githubusercontent.com/epe105/gogs-openshift-docker/master/openshift/gogs-template.yaml \
-                  --param=GOGS_VERSION=0.11.34 \
-                  --param=HOSTNAME=$GOGS_HOSTNAME \
-                  --param=SKIP_TLS_VERIFY=true
-            else
-              oc new-app -f https://raw.githubusercontent.com/epe105/gogs-openshift-docker/master/openshift/gogs-persistent-template.yaml \
-                  --param=GOGS_VERSION=0.11.34 \
-                  --param=HOSTNAME=$GOGS_HOSTNAME \
-                  --param=SKIP_TLS_VERIFY=true
-            fi
+            #if [ "${EPHEMERAL}" == "true" ] ; then
+            #  oc new-app -f https://raw.githubusercontent.com/epe105/gogs-openshift-docker/master/openshift/gogs-template.yaml \
+            #      --param=GOGS_VERSION=0.11.34 \
+            #      --param=HOSTNAME=$GOGS_HOSTNAME \
+            #      --param=SKIP_TLS_VERIFY=true
+            #else
+            #  oc new-app -f https://raw.githubusercontent.com/epe105/gogs-openshift-docker/master/openshift/gogs-persistent-template.yaml \
+            #      --param=GOGS_VERSION=0.11.34 \
+            #      --param=HOSTNAME=$GOGS_HOSTNAME \
+            #      --param=SKIP_TLS_VERIFY=true
+            #fi
 
-            sleep 5
+            #sleep 5
 
             #oc new-app -f https://raw.githubusercontent.com/epe105/sonarqube-openshift-docker/master/sonarqube-template.yaml --param=SONARQUBE_VERSION=7.0 --param=SONAR_MAX_MEMORY=4Gi
             #oc new-app -f https://raw.githubusercontent.com/RHsyseng/docker-rhel-sonarqube/master/templates/sonarqube-ephemeral-template.yaml --param=SONARQUBE_SERVICE_NAME=sonarqube
             oc new-app registry.centos.org/rhsyseng/sonarqube
             oc expose svc/sonarqube
 
-            if [ "${WITH_CHE}" == "true" ] ; then
-              oc process -f https://raw.githubusercontent.com/epe105/minishift-addons/master/add-ons/che/templates/che-single-user.yml \
-                --param PROJECT_NAME=$CICD_NAMESPACE \
-                --param DOMAIN_NAME=$HOSTNAME \
-                --param OPENSHIFT_OAUTH_TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
-                | oc create -f -
+            #if [ "${WITH_CHE}" == "true" ] ; then
+            #  oc process -f https://raw.githubusercontent.com/epe105/minishift-addons/master/add-ons/che/templates/che-single-user.yml \
+            #    --param PROJECT_NAME=$CICD_NAMESPACE \
+            #    --param DOMAIN_NAME=$HOSTNAME \
+            #    --param OPENSHIFT_OAUTH_TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+            #    | oc create -f -
 
-              oc set resources dc/che --limits=cpu=1,memory=2Gi --requests=cpu=200m,memory=512Mi
-            fi
+            #  oc set resources dc/che --limits=cpu=1,memory=2Gi --requests=cpu=200m,memory=512Mi
+            #fi
 
-            if [ "${EPHEMERAL}" == "true" ] ; then
-              oc new-app -f https://raw.githubusercontent.com/OpenShiftDemos/nexus/master/nexus3-template.yaml --param=NEXUS_VERSION=3.13.0 --param=MAX_MEMORY=2Gi
-            else
-              oc new-app -f https://raw.githubusercontent.com/OpenShiftDemos/nexus/master/nexus3-persistent-template.yaml --param=NEXUS_VERSION=3.13.0 --param=MAX_MEMORY=2Gi
-            fi
+            #if [ "${EPHEMERAL}" == "true" ] ; then
+            #  oc new-app -f https://raw.githubusercontent.com/OpenShiftDemos/nexus/master/nexus3-template.yaml --param=NEXUS_VERSION=3.13.0 --param=MAX_MEMORY=2Gi
+            #else
+            #  oc new-app -f https://raw.githubusercontent.com/OpenShiftDemos/nexus/master/nexus3-persistent-template.yaml --param=NEXUS_VERSION=3.13.0 --param=MAX_MEMORY=2Gi
+            #fi
 
-            oc set resources dc/nexus --requests=cpu=200m --limits=cpu=2
+            #oc set resources dc/nexus --requests=cpu=200m --limits=cpu=2
 
-            GOGS_SVC=$(oc get svc gogs -o template --template='{{.spec.clusterIP}}')
-            GOGS_USER=gogs
-            GOGS_PWD=gogs
+            #GOGS_SVC=$(oc get svc gogs -o template --template='{{.spec.clusterIP}}')
+            #GOGS_USER=gogs
+            #GOGS_PWD=gogs
 
-            oc rollout status dc gogs
+            #oc rollout status dc gogs
 
-            _RETURN=$(curl -o /tmp/curl.log -sL --post302 -w "%{http_code}" http://$GOGS_SVC:3000/user/sign_up \
-              --form user_name=$GOGS_USER \
-              --form password=$GOGS_PWD \
-              --form retype=$GOGS_PWD \
-              --form email=admin@gogs.com)
+            #_RETURN=$(curl -o /tmp/curl.log -sL --post302 -w "%{http_code}" http://$GOGS_SVC:3000/user/sign_up \
+            #  --form user_name=$GOGS_USER \
+            #  --form password=$GOGS_PWD \
+            #  --form retype=$GOGS_PWD \
+            #  --form email=admin@gogs.com)
 
-            sleep 5
+            #sleep 5
 
-            if [ $_RETURN != "200" ] && [ $_RETURN != "302" ] ; then
-              echo "ERROR: Failed to create Gogs admin"
-              cat /tmp/curl.log
-              exit 255
-            fi
+            #if [ $_RETURN != "200" ] && [ $_RETURN != "302" ] ; then
+            #  echo "ERROR: Failed to create Gogs admin"
+            #  cat /tmp/curl.log
+            #  exit 255
+            #fi
 
-            sleep 10
+            #sleep 10
 
-            cat <<EOF > /tmp/data.json
-            {
-              "clone_addr": "https://github.com/epe105/openshift-tasks.git",
-              "uid": 1,
-              "repo_name": "openshift-tasks"
-            }
-            EOF
+            #cat <<EOF > /tmp/data.json
+            #{
+            #  "clone_addr": "https://github.com/epe105/openshift-tasks.git",
+            #  "uid": 1,
+            #  "repo_name": "openshift-tasks"
+            #}
+            #EOF
 
-            _RETURN=$(curl -o /tmp/curl.log -sL -w "%{http_code}" -H "Content-Type: application/json" \
-            -u $GOGS_USER:$GOGS_PWD -X POST http://$GOGS_SVC:3000/api/v1/repos/migrate -d @/tmp/data.json)
+            #_RETURN=$(curl -o /tmp/curl.log -sL -w "%{http_code}" -H "Content-Type: application/json" \
+            #-u $GOGS_USER:$GOGS_PWD -X POST http://$GOGS_SVC:3000/api/v1/repos/migrate -d @/tmp/data.json)
 
-            if [ $_RETURN != "201" ] ;then
-              echo "ERROR: Failed to imported openshift-tasks GitHub repo"
-              cat /tmp/curl.log
-              exit 255
-            fi
+            #if [ $_RETURN != "201" ] ;then
+            #  echo "ERROR: Failed to imported openshift-tasks GitHub repo"
+            #  cat /tmp/curl.log
+            #  exit 255
+            #fi
 
-            sleep 5
+            #sleep 5
 
-            cat <<EOF > /tmp/data.json
-            {
-              "type": "gogs",
-              "config": {
-                "url": "https://openshift.default.svc.cluster.local/oapi/v1/namespaces/$CICD_NAMESPACE/buildconfigs/tasks-pipeline/webhooks/secret101/generic",
-                "content_type": "json"
-              },
-              "events": [
-                "push"
-              ],
-              "active": true
-            }
-            EOF
+            #cat <<EOF > /tmp/data.json
+            #{
+            #  "type": "gogs",
+            #  "config": {
+            #    "url": "https://openshift.default.svc.cluster.local/oapi/v1/namespaces/$CICD_NAMESPACE/buildconfigs/tasks-pipeline/webhooks/secret101/generic",
+            #    "content_type": "json"
+            #  },
+            #  "events": [
+            #    "push"
+            #  ],
+            #  "active": true
+            #}
+            #EOF
 
-            _RETURN=$(curl -o /tmp/curl.log -sL -w "%{http_code}" -H "Content-Type: application/json" \
-            -u $GOGS_USER:$GOGS_PWD -X POST http://$GOGS_SVC:3000/api/v1/repos/gogs/openshift-tasks/hooks -d @/tmp/data.json)
+            #_RETURN=$(curl -o /tmp/curl.log -sL -w "%{http_code}" -H "Content-Type: application/json" \
+            #-u $GOGS_USER:$GOGS_PWD -X POST http://$GOGS_SVC:3000/api/v1/repos/gogs/openshift-tasks/hooks -d @/tmp/data.json)
 
-            if [ $_RETURN != "201" ] ; then
-              echo "ERROR: Failed to set webhook"
-              cat /tmp/curl.log
-              exit 255
-            fi
+            #if [ $_RETURN != "201" ] ; then
+            #  echo "ERROR: Failed to set webhook"
+            #  cat /tmp/curl.log
+            #  exit 255
+            #fi
           image: openshift/origin:v3.9.0
           name: cicd-demo-installer-job
           resources: {}

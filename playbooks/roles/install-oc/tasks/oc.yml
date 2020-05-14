@@ -9,7 +9,7 @@
   become: true
 
 - name: Install openshift command-line interface
-  shell: "curl -L 'https://mirror.openshift.com/pub/openshift-v3/clients/{{ openshift_version }}.{{ openshift_patch }}/linux/oc.tar.gz' | tar -xvzf - -C /usr/bin oc &>/dev/null"
+  shell: "curl -L 'https://mirror.openshift.com/pub/openshift-v4/clients/oc/{{ openshift_version }}/linux/oc.tar.gz' | tar -xvzf - -C /usr/bin oc &>/dev/null"
   become: true
 
 - name: Configure oc bash command complete

@@ -1,0 +1,103 @@
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: QuayEcosystem
+metadata:
+  name: example-quayecosystem
+  namespace: quay-enterprise
+spec:
+  clair:
+    database:
+      deploymentStrategy: RollingUpdate
+      image: registry.access.redhat.com/rhscl/postgresql-96-rhel7:1
+      livenessProbe:
+        exec:
+          command:
+          - /usr/libexec/check-container
+          - --live
+        failureThreshold: 3
+        initialDelaySeconds: 120
+        timeoutSeconds: 10
+      readinessProbe:
+        exec:
+          command:
+          - /usr/libexec/check-container
+        failureThreshold: 3
+        initialDelaySeconds: 10
+        timeoutSeconds: 1
+      resources: {}
+    deploymentStrategy: RollingUpdate
+    enabled: true
+    image: quay.io/redhat/clair-jwt:v3.2.0
+    imagePullSecretName: redhat-pull-secret
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 6061
+        scheme: HTTP
+      initialDelaySeconds: 30
+      timeoutSeconds: 5
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 6061
+        scheme: HTTP
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    resources: {}
+  quay:
+    configResources: {}
+    database:
+      deploymentStrategy: RollingUpdate
+      image: registry.access.redhat.com/rhscl/postgresql-96-rhel7:1
+      livenessProbe:
+        exec:
+          command:
+          - /usr/libexec/check-container
+          - --live
+        failureThreshold: 3
+        initialDelaySeconds: 120
+        timeoutSeconds: 10
+      readinessProbe:
+        exec:
+          command:
+          - /usr/libexec/check-container
+        failureThreshold: 3
+        initialDelaySeconds: 10
+        timeoutSeconds: 1
+      resources: {}
+    deploymentStrategy: RollingUpdate
+    externalAccessType: Route
+    image: quay.io/redhat/quay:v3.2.0
+    imagePullSecretName: redhat-pull-secret
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
+      initialDelaySeconds: 120
+      timeoutSeconds: 5
+    migrationPhase: new-installation
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
+      initialDelaySeconds: 5
+    registryBackends:
+    - local:
+        storagePath: /datastorage/registry
+      name: default
+    repoMirrorResources: {}
+    resources: {}
+  redis:
+    deploymentStrategy: RollingUpdate
+    image: registry.access.redhat.com/rhscl/redis-32-rhel7:latest
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      tcpSocket:
+        port: 6379
+    resources: {}

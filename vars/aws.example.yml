@@ -2,22 +2,22 @@
 
 # The name of the cluster.
 # This value will be in your DNS entries and should conform to valid DNS characters.
-cluster_name: openshift
+cluster_name: ocp4demo
 
 # The OpenShift version to install.
+openshift_major: 4
 openshift_minor: 3
-openshift_major: 11
-openshift_patch: 43
+openshift_patch: 4
 
 # IMPORTANT: Make sure this value is quoted, otherwise it gets read as 3.x instead of 3.xx release.
-openshift_version: "{{ openshift_minor }}.{{ openshift_major }}"
+openshift_version: "{{ openshift_major }}.{{ openshift_minor }}"
 
 # The base subdomain to use for your cluster.
 # Example: If you set this to `example.com`, a DNS entry for `<cluster_name>.example.com` will be created).
-openshift_base_domain: example.com
+openshift_base_domain: kee.vizuri.com
 
 # The email address to use when generating Lets Encrypt certs for the cluster.
-cert_email_address: foo@example.com
+cert_email_address: keudy@vizuri.com
 
 # Use Let's Encrypt to generate certificate information. Otherwise, use openssl self-signed certs.
 letsencrypt_cert_generation: false
@@ -27,19 +27,19 @@ aws_region: us-east-1
 # If you have Cloud Access setup for your account, set this to `cloud_access`. Otherwise, set this to `hourly`.
 ec2_ami_type: cloud_access
 # The ID of the Route53 hosted zone
-route53_hosted_zone_id: YP563J79RELJ4C
+route53_hosted_zone_id: Z1UNI6IGKH7P1R
 
 # Your RHSM username.
-rhsm_username: foo@example.com
+rhsm_username: keudy@vizuri.com
 # Your RHSM password.
-rhsm_password: P@55w0rD
+rhsm_password: M@dison30
 # The RHSM pool ID that contains OpenShift subscriptions.
-rhsm_pool: ba4e7732f8abcdad545c7f62df736d1f
+rhsm_pool: 8a85f9946fa01384016faeb8a2c77048
 
 # Your Red Hat registry username
-redhat_registry_username: 1234567|foo
+redhat_registry_username: 5447061|ocpdemo
 # Your Red Hat registry password/token
-redhat_registry_password: 0535VZW0qDK3fBjFwJE93emjk8fmzNBLJ2XHN8TNrAsxmaqDOOz2G
+redhat_registry_password: eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiIwMjU5NGQzNjY1OTM0MDMyYmM2N2MzM2NmYzkwNmE5YyJ9.k2q9WPxx_JqjK57H1Jlxkbpmx5rZpTVkJxGm0OouLPoUKvASP88_PE-uwBLDBQi8wFthoCmah3yasK38GDULkOuyAIKBgV2vohsbQugYdEorn09Or07f7bmxNU8EH0LuDFJauFJpXTvK_Tpsodg9SnI3XaPcBfOy8UTz8RjnLcIe_eXQ2kTST0VdsOVpSjGcCDBGi4N55VgDKVY9Il0fN2O_MzB0Mb35b10PT6VPjf3EJupKmZARdIMcKFSplZ4dGstWVwCfEr-fBCB_zElP_DwxagDrBsK9MUJGfoWRRCGtJZvAXAAiQXKBkd4zgBc5y0AiDIwN6U8jlDMfCzsqKwg-6anh5dCWBMEuSjUVZ0tqJLb9acHOwljAyArS6uhDSuK3qs8GqrsAwbVpTTUDmCDvcLhi6e4pk_a1YGfUBJOZ4-hw_bvHuk4BkFsCCd_KrX506MXs8LWIqNqyjE1sLUyfQim-qFxudm1FQg651M_aDS0iHyn9_6CtXr82I52wT5fbV9Yy4nqQs78dmus2gmKl2DAHECirhVF_mtsfYiRFPykyXPn4t9BSsxDl_gb-pGkKygYg9088JfxM0BD8YPgrD9D_JPDkAEV7ZL3ooOdpQTnhHMkXeXNI-iUk6cS23JM47C1qxVJg1CkWjfNVExrTsybKhiVyHC__8bpdlJI
 
 # The users to create in OpenShift
 openshift_users:
@@ -61,10 +61,10 @@ github_user: epe105
 # Generates a set of non-admin users that can be used for workshops, demos, etc.
 # Users are created with the prefix plus a number using the password specified.
 generic_group: docker
-generic_user: changeme!
-generic_pass: changeme!
+generic_user: student
+generic_pass: workshop1!
 generic_count_begin: 1
-generic_count: 3
+generic_count: 2 
 generic_pause: 30
 
 # Derived public DNS entry for your cluster.
@@ -73,17 +73,18 @@ cluster_name_verbose: "{{ openshift_public_hostname | replace('.', '-') }}"
 cluster_group_name: "{{ cluster_name_verbose | replace('-', '_') }}"
 
 # The directory that contains public key material.
-keys_dir: /your/path/here/changeme!
+keys_dir: /Users/keudy/.ssh
 # The name of the ec2 instances public key.
-ec2_key_name: "{{ cluster_name_verbose }}"
+#ec2_key_name: "ocpdevsecops"
 # The ec2 instances public key file.
-ec2_key_file: "{{ keys_dir }}/{{ ec2_key_name }}.pem"
+#ec2_key_file: "{{ keys_dir }}/{{ ec2_key_name }}.pem"
+ec2_key_file: "{{ keys_dir }}/kenteudy-aws"
 
 # Default quay configuration.
-clusteradmin: changeme!
-clusteradminpass: changeme!
-quayiouser: changeme!
-quayiopassword: changeme!
+clusteradmin: keudy
+clusteradminpass: P@ssw0rd
+quayiouser: admin
+quayiopassword: P@ssw0rd!
 
 # Default ansible configuration.
 ansible_user: ec2-user

@@ -1,0 +1,44 @@
+- name: Delete Student Website
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    students_start: 1
+    students_end: 2
+    s3_state: absent
+    workshop_dns_zone: kee.vizuri.com
+    #ec2_name_prefix: ocpws
+    ec2_name_prefix: devsecops
+    ec2_region: us-east-1
+
+
+  tasks:
+  - name: DELETE S3 BUCKET
+    s3_bucket:
+      name: "{{item}}"
+      state: "{{ s3_state }}"
+      region: "{{ec2_region}}"
+      force: yes
+    with_items: 
+    - aws-codestar-us-east-1-505576296154
+    - aws-codestar-us-east-1-505576296154-mylambdaspring-pipe
+    - aws-nodejs-dev-serverlessdeploymentbucket-1tfxhp8ioq0e5
+    - awsamplifyionicsampl-20190410132256-deployment
+    - devsecops.devsecops.kee.vizuri.com
+    - elasticbeanstalk-us-east-1-505576296154
+    - fhir-patient-upload
+    - ionicsampleapp-deployments-mobilehub-1793041673
+    - kee-3scale
+    - kee-datagrid-relay-cluster
+    - kee-datagrid-test
+    - kee-datagrid-test-relay
+    - kee-datagrid-test1
+    - kee-datagrid-test2
+    - kee-demo-trail
+    - kee-dg-01
+    - kee-dg-02
+    - kee-dg-relay
+    - kee-sso-test1
+    - kentarticle
+    - madan-survey-app
+

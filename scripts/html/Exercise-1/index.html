@@ -1,0 +1,422 @@
+<html>
+  <head>
+    <title>Advanced Container CI/CD Workshop Labs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css">
+    <style>
+      pre {
+        background: grey;
+        color: #fff !important;
+        width: 100%;
+        padding: 5px;
+        max-width: 1000px;
+
+      }
+
+      .content{
+              display:none;
+              margin: 10px;
+      }
+
+      .header{
+        border-bottom: 1px solid #494a5a;
+        padding-bottom: 20px;
+      }
+
+      .student_logins {
+          width:100%;
+          border:1px solid #d3d3d3;
+      }
+      .student_logins div {
+          width:100%;
+      }
+      .student_logins .header {
+          background-color:#d3d3d3;
+          padding: 2px;
+          cursor: pointer;
+          font-weight: bold;
+      }
+      .student_logins .studentx {
+          display: none;
+          padding : 5px;
+      }
+
+      .linklightfooter {
+          background-color: #212121;
+          padding: 80px 0px;
+          font-size: 0.7em;
+          color: #fff;
+          font-weight: 300;
+      }
+
+      section {
+          padding: 40px 0px;
+      }
+
+      body {
+        line-height: 1.5;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      .theme-dark,
+      .theme-dark *{
+          color: #fff;
+      }
+
+      .theme-bg-gray{
+          background-color: #cac8c8;
+      }
+
+      .theme-bg-darkgray{
+          background-color: #a2a1a1;
+      }
+
+      .btn {
+          border-radius: 0px;
+          text-align: center;
+          padding: 10px 20px;
+          margin-bottom: 0px;
+      }
+
+      .btn.btn-block {
+          display: block;
+      }
+
+      .btn.btn-primary,
+      .btn.btn-secondary {
+          background-color: #a2a1a1;
+          color: #fff;
+          padding: 30px;
+      }
+
+      .btn.btn-secondary {
+          background-color: #cac8c8;
+      }
+
+      .btn.btn-ghost{
+          border: 1px solid #fff;
+          color: #fff;
+          background: transparent;
+      }
+
+
+      .page-header {
+          background: #c00;
+          color: #fff;
+          text-align: center;
+      }
+
+      .page-header h1 {
+          font-size: 21px;
+          text-transform: uppercase;
+          font-weight: 400;
+      }
+
+      .page-header h2 {
+          font-size: 1em;
+          font-weight: 300;
+      }
+
+
+      .main-content h1{
+          color: #333;
+      }
+
+      .main-content h2{
+          color: #cc0000;
+      }
+
+      .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
+          color: #c00;
+      }
+
+
+      footer.site-footer{
+          background-color: #212121;
+          padding: 80px 0px;
+          font-size: 0.7em;
+          color: #fff;
+          font-weight: 300;
+      }
+
+
+
+      @media screen and (min-width: 768px){
+
+          .page-header h1 {
+              font-size: 24px;
+          }
+
+          .main-content {
+              font-size: 1.125rem;
+          }
+      }
+
+
+
+      /* theme overrides */
+
+      @media screen and (max-width: 42em){
+          .main-content {
+              padding: 2rem 0px;
+              font-size: 1rem;
+          }
+      }
+
+      @media screen and (max-width: 64em) and (min-width: 42em){
+          .main-content {
+              padding: 2rem 0px;
+              font-size: 1rem;
+          }
+      }
+
+      @media screen and (min-width: 64em){
+          .main-content {
+              max-width: none;
+              font-size: 1.1rem;
+          }
+      }
+
+      a {
+        test-decoration: none;
+      }
+
+
+
+      img[alt="car-thumbnail"] {
+        width: 30vw;
+        height: 30vw;
+        display: inline-block;
+        object-fit: cover;
+      }
+      img[alt="car-thumbnail"] + br {
+        display: none;
+      }
+
+      .column {
+        float: left;
+      }
+
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    </style>
+
+    <script>
+        function copyToClipboard(inputText) {
+
+            if (inputText){
+                var el = document.createElement('textarea');
+                document.body.appendChild(el);
+
+                el.value = inputText;
+
+                /* Copy the text inside the text field */
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }
+
+        }
+    </script>
+  </head>
+  <body>
+
+  <div class="row" style="background-color: #c00;">
+    <div class="column" style="width: 33.33%;"><img src="/images/vizuri_logo_new.png" id="logo" style="height: 80px;"></div>
+    <div class="column" style="padding-top: 30px;width: 60%;"></div>
+    <div class="column" style="padding-top: 30px;"><a href=/>Home</a></div>
+
+  </div>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+          <div class="col-md-8 mx-auto">
+            <h1 class="project-name"> <strong class="text-nowrap">Red Hat DevSecOps Workshop</strong></h1>
+            <h2>This workshop is for demonstrating Red Hat's DevSecOps capabilities through instructor-led exercises.</h2>
+
+              <a href="https://github.com/vizuri/devsecops-workshop" class="btn btn-ghost" target="_blank">View on GitHub</a><br><br>
+          </div>
+      </div>
+    </div>
+  </section>
+
+<h1>Trusted Software Supply Chain Environment</h1>
+
+<p>In this lab you will explore the tools utilized throught this workshop.  </p>
+
+<p>The following tools are utilized to create our Trusted Software Supply Chain.  </p>
+
+<h2>Openshift</h2>
+
+<p>OpenShift is the container orchestration platform that hosts oure Supply Chain Tools as well as our application deployments. </p>
+
+<p>A) Navigate to the OpenShift Console: <a href="https://console-openshift-console.apps.ocpws.kee.vizuri.com"><a href='https://console-openshift-console.apps.ocpws.kee.vizuri.com'>https://console-openshift-console.apps.ocpws.kee.vizuri.com</a></a> <a href="#0"><a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('https://console-openshift-console.apps.ocpws.kee.vizuri.com')" alt="copy-paste" width="20"></a></p>
+
+<ul>
+<li>Username: <code>student1</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('student1')" alt="copy-paste" width="20"></a></li>
+<li><p>Password: <code>workshop1!</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('workshop1!')" alt="copy-paste" width="20"></a></p>
+
+<blockquote>
+  <p>Note: Click on the <strong>Advanced</strong> button and click on the link: <strong>Proceed to ocpws.kee.vizuri.com (unsafe)</strong></p>
+</blockquote></li>
+</ul>
+
+<p>B) You have three projects pre-created for you (<em>Under Home -> Projects on the left</em>)</p>
+
+<ul>
+<li><p>cicd-student1 - Tools needed for Trusted Supply Chain </p>
+
+<ul><li>anchore - Container Scanning Service</li>
+<li>anchoredb - Database for Anchore Container Scanning Service</li>
+<li>jenkins - Jenkins</li>
+<li>nexus - Nexus artifact reposigory</li>
+<li>sonarqube - Code Quality Service</li>
+<li>sonardb - Database for Code Quality Service</li></ul></li>
+<li><p>dev-student1 - Development Project</p></li>
+<li><p>stage-student1 - Staging Project</p></li>
+</ul>
+
+<blockquote>
+  <p>Note: Your codeready workspace will not appear until you complete the Codeready Steps Below.</p>
+</blockquote>
+
+<p><img src="../images/openshift_1.png" alt="jenkins_welcome" width="500"></p>
+
+<h2>Jenkins</h2>
+
+<p>Jenkins provides the platform to execute oure Trusted Software Supply Chain CI/CD Pipelines.  </p>
+
+<p>A) Confirm you can log into your jenkins console: <a href="https://jenkins-cicd-student1.apps.ocpws.kee.vizuri.com"><a href='https://jenkins-cicd-student1.apps.ocpws.kee.vizuri.com'>https://jenkins-cicd-student1.apps.ocpws.kee.vizuri.com</a></a> <a href="#0" target="_blank"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('https://jenkins-cicd-student1.apps.ocpws.kee.vizuri.com')" alt="copy-paste" width="20"></a></p>
+
+<p>When prompted Select 'Log in with OpenShift' </p>
+
+<p><img src="../images/log-in-with-openshift.png"></p>
+
+<ul>
+<li>Username: <code>student1</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('student1')" alt="copy-paste" width="20"></a></li>
+<li><p>Password: <code>workshop1!</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('workshop1!')" alt="copy-paste" width="20"></a></p>
+
+<blockquote>
+  <p>Note: Click on the <strong>Allow selected permissions</strong> button the first time: <br /> <img src="../images/jenkins_accept.png" alt="jenkins_accept" width="500"> </p>
+</blockquote></li>
+</ul>
+
+<p>B) Should see the message: </p>
+
+<p><img src="../images/jenkins_welcome.png" alt="jenkins_welcome" width="200"></p>
+
+<h2>Nexus</h2>
+
+<p>Nexus is an artifact repository that stores versioned build artifacts.  It is utilized to store the WAR archieve in our Trusted Software Supply Chain. </p>
+
+<p>A) Confirm you can navigate to nexus: <a href="http://nexus-cicd-student1.apps.ocpws.kee.vizuri.com"><a href='http://nexus-cicd-student1.apps.ocpws.kee.vizuri.com'>http://nexus-cicd-student1.apps.ocpws.kee.vizuri.com</a></a> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('http://nexus-cicd-student1.apps.ocpws.kee.vizuri.com')" alt="copy-paste" width="20"></a></p>
+
+<p>B) Should see the message: </p>
+
+<p><img src="../images/nexus_welcome.png" alt="nexus_welcome" width="400"></p>
+
+<h2>Quay Registry</h2>
+
+<p>Quay is an Enterprise Container Registry.  It is utilized to store and scan container images in our Trusted Software Supply Chain.</p>
+
+<p>A) Confirm you can log into the Quay Container Registry: <a href="https://quay.apps.ocpws.kee.vizuri.com/repository"><a href='https://quay.apps.ocpws.kee.vizuri.com/repository'>https://quay.apps.ocpws.kee.vizuri.com/repository</a></a> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('https://quay.apps.ocpws.kee.vizuri.com/repository')" alt="copy-paste" width="20"></a></p>
+
+<ul>
+<li>Username: <code>student1</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('student1')" alt="copy-paste" width="20"></a></li>
+<li><p>Password: <code>workshop1!</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('workshop1!')" alt="copy-paste" width="20"></a></p>
+
+<blockquote>
+  <p>Note: Click on the <strong>Advanced</strong> button and click on the link: <strong>Proceed to quay.apps.ocpws.kee.vizuri.com (unsafe)</strong></p>
+  
+  <p>Note: If asked, you may have to confirm your username. So please click on the <em>Confirm Username</em> button when prompted</p>
+</blockquote>
+
+<p><img src="../images/confirm_username.png" alt="confirm_username" width="500"></p></li>
+</ul>
+
+<h2>SonarQube</h2>
+
+<p>SonarQube is a static code analyzer that is utilized to identify issues code issues in our Trusted Software Supply Chain.</p>
+
+<p>A) Confirm you can log into the sonarqube console: <a href="http://sonarqube-cicd-student1.apps.ocpws.kee.vizuri.com"><a href='http://sonarqube-cicd-student1.apps.ocpws.kee.vizuri.com'>http://sonarqube-cicd-student1.apps.ocpws.kee.vizuri.com</a></a> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('http://sonarqube-cicd-student1.apps.ocpws.kee.vizuri.com')" alt="copy-paste" width="20"></a></p>
+
+<ul>
+<li>Username: <code>admin</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('admin')" alt="copy-paste" width="20"></a></li>
+<li><p>Password: <code>admin</code></p>
+
+<blockquote>
+  <p>Note: If you are prompted to enter a token just click on <em>Skip this tutorial</em> in the top right. </p>
+</blockquote>
+
+<p><img src="../images/skip_tutorial.png" alt="confirm_username" width="40%"></p></li>
+</ul>
+
+<p>B) Should see the page: </p>
+
+<p><img src="../images/sonarqube_welcome.png" alt="sonarqube_welcome" width="500"></p>
+
+<h2>Gogs (git repositories)</h2>
+
+<p>Gogs is a contaierized git repository.  It provides the code repository for our Trusted Software Supply Chain.</p>
+
+<p>A) Confirm you can log into the gogs git server: <a href="http://gogs.apps.ocpws.kee.vizuri.com"><a href='http://gogs.apps.ocpws.kee.vizuri.com'>http://gogs.apps.ocpws.kee.vizuri.com</a></a> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('http://gogs.apps.ocpws.kee.vizuri.com')" alt="copy-paste" width="20"></a></p>
+
+<p>Click the 'Sign In' Button.</p>
+
+<ul>
+<li>Username: <code>student1</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('student1')" alt="copy-paste" width="20"></a></li>
+<li>Password: <code>workshop1!</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('workshop1!')" alt="copy-paste" width="20"></a></li>
+</ul>
+
+<p>B) You have one repository that we will use for the labs:</p>
+
+<ul>
+<li>openshift-tasks - Web application that is orchestrated thourgh the Trusted Software Supply Chain</li>
+</ul>
+
+<p><img src="../images/gogs-1.png" alt="gogs" width="500">  </p>
+
+<h2>Codeready Workspaces</h2>
+
+<p>Codeready workspaces is a container based development environemtn.  It is utilized to develop the pipelines for the Trusted Software Supply Chain.</p>
+
+<p>A) Confirm you can log into Code Ready Workspaces: <a href="http://codeready-codeready.apps.ocpws.kee.vizuri.com"><a href='http://codeready-codeready.apps.ocpws.kee.vizuri.com'>http://codeready-codeready.apps.ocpws.kee.vizuri.com</a></a> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('http://codeready-codeready.apps.ocpws.kee.vizuri.com')" alt="copy-paste" width="20"></a></p>
+
+<ul>
+<li>Username: <code>student1</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('student1')" alt="copy-paste" width="20"></a></li>
+<li><p>Password: <code>workshop1!</code> <a href="#0"><img src="../images/copy-paste.jpeg" onclick="copyToClipboard('workshop1!')" alt="copy-paste" width="20"></a></p>
+
+<blockquote>
+  <p>Note: Click on the <strong>Allow selected permissions</strong> button the first time: <br /> <img src="../images/codeready_authorize.png" alt="jenkins_accept" width="500"> </p>
+  
+  <p>Note: Update Account Information the first time.  You can provide any email, first name and last name you would like:<br /> <img src="../images/codeready_account_info.png" alt="jenkins_accept" width="500">"</p>
+</blockquote>
+
+<p>B) Should see the page: </p></li>
+</ul>
+
+<p><img src="../images/codeready_getting_started.png" alt="sonarqube_welcome" width="500">    </p>
+
+<p>C) Create Your Workshop Workspace</p>
+
+<p>Choose the 'Java Spring Boot Workshop' Template and Click on 'Create and Open' to launch your Workshop Workspace.</p>
+
+<p><img src="../images/codeready_create_workspace.png" alt="sonarqube_welcome" width="500">    </p>
+
+<p>It will take a few minutes, but once your workspace has been created you should see this screen.</p>
+
+<p><img src="../images/codeready_workspace1.png" alt="sonarqube_welcome" width="500">    </p>
+
+<p>Click on the Explorer Icon in the left navigation of the workspace.</p>
+
+<p><img src="../images/codeready_workspace2.png" alt="sonarqube_welcome" width="500">  </p>
+
+<p>This will open the Explorer Window.  Verify you have the openshift-tasks project in your workspace.   This is the project you will working on to build your Trusted Software Supply Chain.</p>
+
+<p><img src="../images/codeready_workspace3.png" alt="sonarqube_welcome" width="500">  </p>
+  </body>
+</html>

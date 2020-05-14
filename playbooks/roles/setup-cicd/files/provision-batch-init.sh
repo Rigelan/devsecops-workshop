@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hostname=https://{{ openshift_public_hostname }}
+hostname=https://{{ openshift_public_hostname }}:8443
 password={{ generic_pass }}
 username={{ generic_user }}
 begin={{ generic_count_begin }}

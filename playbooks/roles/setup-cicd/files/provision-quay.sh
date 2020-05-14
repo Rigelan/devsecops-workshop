@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hostname=https://{{ openshift_public_hostname }}
+hostname=https://{{ openshift_public_hostname }}:8443
 clusteradmin={{ clusteradmin }}
 clusteradminpass={{ clusteradminpass }}
 domain=apps.{{ openshift_public_hostname }}

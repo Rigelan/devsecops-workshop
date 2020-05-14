@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Advanced Container CI/CD Workshop Labs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css">
+    <style>
+      img[alt="car-thumbnail"] {
+        width: 30vw;
+        height: 30vw;
+        display: inline-block;
+        object-fit: cover;
+      }
+      img[alt="car-thumbnail"] + br {
+        display: none;
+      }
+
+      .column {
+        float: left;
+      }
+
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    </style>
+
+    <script>
+        function copyToClipboard(inputText) {
+
+            if (inputText){
+                var el = document.createElement('textarea');
+                document.body.appendChild(el);
+
+                el.value = inputText;
+
+                /* Copy the text inside the text field */
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }
+
+        }
+    </script>
+  </head>
+  <body class="markdown-body">
+
+  <div class="row">
+    <div class="column" style="width: 33.33%;"><img src="/images/vizuri_logo_new.png" id="logo" style="height: 80px;"></div>
+    <div class="column" style="padding-top: 30px;width: 60%;"></div>
+    <div class="column" style="padding-top: 30px;"><a href=/>Home</a></div>
+
+  </div>
+
+  <h1>Advanced Container CI/CD Workshop Labs</h1>
+  <hr/>

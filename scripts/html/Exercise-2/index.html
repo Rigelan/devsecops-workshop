@@ -1,0 +1,290 @@
+<html>
+  <head>
+    <title>Advanced Container CI/CD Workshop Labs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css">
+    <style>
+      pre {
+        background: grey;
+        color: #fff !important;
+        width: 100%;
+        padding: 5px;
+        max-width: 1000px;
+
+      }
+
+      .content{
+              display:none;
+              margin: 10px;
+      }
+
+      .header{
+        border-bottom: 1px solid #494a5a;
+        padding-bottom: 20px;
+      }
+
+      .student_logins {
+          width:100%;
+          border:1px solid #d3d3d3;
+      }
+      .student_logins div {
+          width:100%;
+      }
+      .student_logins .header {
+          background-color:#d3d3d3;
+          padding: 2px;
+          cursor: pointer;
+          font-weight: bold;
+      }
+      .student_logins .studentx {
+          display: none;
+          padding : 5px;
+      }
+
+      .linklightfooter {
+          background-color: #212121;
+          padding: 80px 0px;
+          font-size: 0.7em;
+          color: #fff;
+          font-weight: 300;
+      }
+
+      section {
+          padding: 40px 0px;
+      }
+
+      body {
+        line-height: 1.5;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      .theme-dark,
+      .theme-dark *{
+          color: #fff;
+      }
+
+      .theme-bg-gray{
+          background-color: #cac8c8;
+      }
+
+      .theme-bg-darkgray{
+          background-color: #a2a1a1;
+      }
+
+      .btn {
+          border-radius: 0px;
+          text-align: center;
+          padding: 10px 20px;
+          margin-bottom: 0px;
+      }
+
+      .btn.btn-block {
+          display: block;
+      }
+
+      .btn.btn-primary,
+      .btn.btn-secondary {
+          background-color: #a2a1a1;
+          color: #fff;
+          padding: 30px;
+      }
+
+      .btn.btn-secondary {
+          background-color: #cac8c8;
+      }
+
+      .btn.btn-ghost{
+          border: 1px solid #fff;
+          color: #fff;
+          background: transparent;
+      }
+
+
+      .page-header {
+          background: #c00;
+          color: #fff;
+          text-align: center;
+      }
+
+      .page-header h1 {
+          font-size: 21px;
+          text-transform: uppercase;
+          font-weight: 400;
+      }
+
+      .page-header h2 {
+          font-size: 1em;
+          font-weight: 300;
+      }
+
+
+      .main-content h1{
+          color: #333;
+      }
+
+      .main-content h2{
+          color: #cc0000;
+      }
+
+      .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
+          color: #c00;
+      }
+
+
+      footer.site-footer{
+          background-color: #212121;
+          padding: 80px 0px;
+          font-size: 0.7em;
+          color: #fff;
+          font-weight: 300;
+      }
+
+
+
+      @media screen and (min-width: 768px){
+
+          .page-header h1 {
+              font-size: 24px;
+          }
+
+          .main-content {
+              font-size: 1.125rem;
+          }
+      }
+
+
+
+      /* theme overrides */
+
+      @media screen and (max-width: 42em){
+          .main-content {
+              padding: 2rem 0px;
+              font-size: 1rem;
+          }
+      }
+
+      @media screen and (max-width: 64em) and (min-width: 42em){
+          .main-content {
+              padding: 2rem 0px;
+              font-size: 1rem;
+          }
+      }
+
+      @media screen and (min-width: 64em){
+          .main-content {
+              max-width: none;
+              font-size: 1.1rem;
+          }
+      }
+
+      a {
+        test-decoration: none;
+      }
+
+
+
+      img[alt="car-thumbnail"] {
+        width: 30vw;
+        height: 30vw;
+        display: inline-block;
+        object-fit: cover;
+      }
+      img[alt="car-thumbnail"] + br {
+        display: none;
+      }
+
+      .column {
+        float: left;
+      }
+
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    </style>
+
+    <script>
+        function copyToClipboard(inputText) {
+
+            if (inputText){
+                var el = document.createElement('textarea');
+                document.body.appendChild(el);
+
+                el.value = inputText;
+
+                /* Copy the text inside the text field */
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }
+
+        }
+    </script>
+  </head>
+  <body>
+
+  <div class="row" style="background-color: #c00;">
+    <div class="column" style="width: 33.33%;"><img src="/images/vizuri_logo_new.png" id="logo" style="height: 80px;"></div>
+    <div class="column" style="padding-top: 30px;width: 60%;"></div>
+    <div class="column" style="padding-top: 30px;"><a href=/>Home</a></div>
+
+  </div>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+          <div class="col-md-8 mx-auto">
+            <h1 class="project-name"> <strong class="text-nowrap">Red Hat DevSecOps Workshop</strong></h1>
+            <h2>This workshop is for demonstrating Red Hat's DevSecOps capabilities through instructor-led exercises.</h2>
+
+              <a href="https://github.com/vizuri/devsecops-workshop" class="btn btn-ghost" target="_blank">View on GitHub</a><br><br>
+          </div>
+      </div>
+    </div>
+  </section>
+
+<h1>Exercise 2 - Creating Your Pipeline</h1>
+
+<p>Today, you will be building your Trusted Software Supply Chain using a Jenkins Pipeline that is integrated with OpenShift.</p>
+
+<p>In the Jenkins Console (<a href="https://jenkins-cicd-student1.apps.ocpws.kee.vizuri.com"><a href='https://jenkins-cicd-student1.apps.ocpws.kee.vizuri.com'>https://jenkins-cicd-student1.apps.ocpws.kee.vizuri.com</a></a> ), click on 'New Item' to create your trusted software supply chain pipeline job.</p>
+
+<p><img src="../images/jenkins_1.png" alt="sonarqube_welcome" width="500">  </p>
+
+<p>Enter openshift-tasks for the item name and select Pipeline as the type.</p>
+
+<p><img src="../images/jenkins_2.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>Click OK to create the pipeline job.  </p>
+
+<p>Switch the Definition from 'Pipeline script' to 'Pipeline scipt from SCM'.  Out Pipeline Script will be stored in the git repository with the source code of the application.  </p>
+
+<p><img src="../images/jenkins_3.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>Choose Git from the SCM selection box.</p>
+
+<p><img src="../images/jenkins_4.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>Now enter your git repository URL into the Repository URL box and eap-7 into the Branch Specifier.</p>
+
+<ul>
+<li>Git Repository URL: <a href='http://gogs.apps.ocpws.kee.vizuri.com/student1/openshift-tasks.git'>http://gogs.apps.ocpws.kee.vizuri.com/student1/openshift-tasks.git</a></li>
+<li>Branch Specifier: eap-7</li>
+</ul>
+
+<p><img src="../images/jenkins_5.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>Click 'Save' to create your pipeline job.</p>
+
+<p>Click on 'Build Now' in the left menue of your job to test that your pipeline job is configured properly.  </p>
+
+<p><img src="../images/jenkins_6.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>Verify your pipeline completes successfully in the Stage View.</p>
+
+<p><img src="../images/jenkins_7.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>You will be adding to this pipleine in the rest of the labs.</p>
+  </body>
+</html>

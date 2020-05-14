@@ -270,11 +270,23 @@ $("document").ready(function(){
                                 password:   {{generic_pass}}<br>
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn btn-secondary btn-block" href="https://{{cluster_name}}.{{openshift_base_domain}}" target="_blank">OpenShift Console</a>
+                                <a class="btn btn-secondary btn-block" href="https://console-openshift-console.apps.{{cluster_name}}.{{openshift_base_domain}}" target="_blank">OpenShift Console</a>
                             </div>
                         </div>
                         <div class="row">
                             <br>
+                        </div>
+                        <div class="row">
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                username:   {{generic_user}}{{number}}<br>
+                                password:   {{generic_pass}}<br>
+                            </div>
+                            <div class="col-sm-4">
+                                <a class="btn btn-secondary btn-block" href="http://codeready-codeready.apps.{{cluster_name}}.{{openshift_base_domain}}" target="_blank">Browser IDE (Codeready)</a>
+                            </div>
                         </div>
                         <div class="row">
                             <br>
@@ -317,23 +329,11 @@ $("document").ready(function(){
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
-                                username:   gogs<br>
-                                password:   gogs<br>
+                                username:   {{generic_user}}{{number}}<br>
+                                password:   {{generic_pass}}<br>
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn btn-secondary btn-block" href="http://gogs-cicd-{{generic_user}}{{number}}.apps.{{cluster_name}}.{{openshift_base_domain}}" target="_blank">Source Code Repository (Gogs)</a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <br>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                username:   <br>
-                                password:   <br>
-                            </div>
-                            <div class="col-sm-4">
-                                <a class="btn btn-secondary btn-block" href="http://che-cicd-{{generic_user}}{{number}}.apps.{{cluster_name}}.{{openshift_base_domain}}" target="_blank">Browser IDE (Che)</a>
+                                <a class="btn btn-secondary btn-block" href="http://gogs.apps.{{cluster_name}}.{{openshift_base_domain}}" target="_blank">Source Code Repository (Gogs)</a>
                             </div>
                         </div>
                         <div class="row">
@@ -345,7 +345,7 @@ $("document").ready(function(){
                                 password:   {{generic_pass}}<br>
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn btn-secondary btn-block" href="http://quay-enterprise-quay-enterprise.apps.{{cluster_name}}.{{openshift_base_domain}}" target="_blank">Image Repository (Quay)</a>
+                                <a class="btn btn-secondary btn-block" href="http://quay.apps.ocpws.{{openshift_base_domain}}" target="_blank">Image Repository (Quay)</a>
                             </div>
                         </div>
                         <div class="row">
@@ -354,18 +354,6 @@ $("document").ready(function(){
                         <div class="row">
                             <div class="col-sm-4">
                                 username:   {{generic_user}}{{number}}<br>
-                                password:   {{generic_pass}}<br>
-                            </div>
-                            <div class="col-sm-4">
-                                <a class="btn btn-secondary btn-block" href="http://workshop-terminal-ocwt-{{generic_user}}{{number}}.apps.{{cluster_name}}.{{openshift_base_domain}}" target="_blank">Browser Terminal (Butterfly)</a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <br>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                username:   user{{number}}<br>
                                 password:   {{generic_pass}}<br>
                             </div>
                             <div class="col-sm-4">
@@ -396,6 +384,58 @@ $("document").ready(function(){
                   <a class="btn btn-secondary btn-block" href="https://mirror.openshift.com/pub/openshift-v3/clients/" target="_blank">oc clients</a>
               </div>
           </div>
+      </div>
+  </section>
+
+  <section>
+      <div class="container">
+          <div class="row">
+              <div class="col-sm-8">
+                  <h2>Workshop Lab Updates</h2>
+                  <br/>
+                  <h3>Lab 17</h3>
+                  <p>Variables: (Update your student number)</p>
+                  <pre><code>
+def ocuser = "student0"
+def ocpass = "workshop1!"
+def ocpapp = "devsecops.kee.vizuri.com"
+def ocp = "devsecops.kee.vizuri.com:8443"
+def quayurl = "quay.apps.ocpws.kee.vizuri.com"
+def master = "master.devsecops.kee.vizuri.com"
+def quayuser = "student0"
+def quaypass = "workshop1!"
+def quayrepo = "jboss-eap70-openshift"
+                  </code></pre>
+                  <br/>
+                  <p>Don't Change the jenkins agent.  Leave it to "maven"</p>
+                  <p>Add this stage to perform clair scanning</p>
+                  <pre><code>
+stage('Clair Container Vulnerability Scan') {
+      steps {
+         node("jenkins-slave-image-mgmt") {
+            sh "oc login -u $ocuser -p $ocpass --insecure-skip-tls-verify https://$ocp 2>&1"
+            sh 'skopeo --debug copy --src-creds="$(oc whoami)":"$(oc whoami -t)" --src-tls-verify=false --dest-tls-verify=false' + " --dest-creds=$quayuser:$quaypass docker://docker-registry.default.svc:5000/cicd-$ocuser/jboss-eap70-openshift:1.5 docker://$quayurl/$quayuser/$quayrepo:1.5"
+        }
+      }
+    }
+                  </code></pre>
+                  <h3>Lab 18</h3>
+                  <p>Stage for OpenSCAP DISA STIG Scan</p>
+                  <pre><code>
+stage('OSCAP DISA STIG Scan') {
+      steps {
+         node("jenkins-slave-image-mgmt") {
+          sh "oc login -u $ocuser -p $ocpass --insecure-skip-tls-verify https://$ocp 2>&1"
+          sh "sshpass -p $ocpass ssh -oStrictHostKeyChecking=no -t $ocuser@$master docker login -u $ocuser -p " + '"$(oc whoami -t)"' + " docker-registry-default.apps.$ocpapp"
+          sh "sshpass -p $ocpass ssh -oStrictHostKeyChecking=no -t $ocuser@$master docker pull docker-registry-default.apps.$ocpapp/dev-$ocuser/tasks:latest"
+          sh "sshpass -p $ocpass ssh -oStrictHostKeyChecking=no -t $ocuser@$master sudo oscap-docker image docker-registry-default.apps.$ocpapp/dev-$ocuser/tasks:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+         } 
+         }
+      }
+                  </code></pre>
+              </div>
+          </div>
+
       </div>
   </section>
 

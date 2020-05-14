@@ -1,0 +1,16 @@
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: QuayEcosystem
+metadata:
+  name: quayecosystem
+  namespace: quay-enterprise
+spec:
+  clair:
+    enabled: true
+    imagePullSecretName: redhat-pull-secret
+  quay:
+    deploymentStrategy: Recreate
+    externalAccess:
+      hostname: quay.apps.ocpws.kee.vizuri.com
+    imagePullSecretName: redhat-pull-secret
+    keepConfigDeployment: true
+    skipSetup: false

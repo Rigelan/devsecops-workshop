@@ -1,0 +1,54 @@
+- name: Setup Gogs Users
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    gogs_url: "gogs.apps.ocpws.kee.vizuri.com"
+    students_start: 1
+    students_end: 60 
+    user_prefix: "student" 
+    #user_prefix: "user"
+    user_pass: "workshop1!"
+    gogs_admin_user: "gogs-admin"
+    gogs_admin_pass: "P@ssw0rd"
+
+  tasks:
+  - name: Create Gogs Admin User
+    uri:
+      url: "http://{{ gogs_url }}/user/sign_up"
+      method: POST
+      body_format: form-urlencoded
+      body:
+        user_name: "{{ gogs_admin_user }}"
+        password: "{{ gogs_admin_pass }}"
+        retype: "{{ gogs_admin_pass }}"
+        email: "{{ gogs_admin_user }}@vizuri.com"
+      status_code: 302
+
+  - name: Create Gogs Users
+    uri:
+      url: "http://{{ gogs_url }}/user/sign_up"
+      method: POST
+      body_format: form-urlencoded
+      body:
+        user_name: "{{ user_prefix }}{{ item }}"
+        password: "{{ user_pass }}"
+        retype: "{{ user_pass }}"
+        email: "{{ user_prefix }}{{ item }}@vizuri.com"
+      status_code: 302
+    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+  - name: Create OpenShift Tasks Repo
+    uri:
+      url: "http://{{ gogs_url }}/api/v1/repos/migrate"
+      force_basic_auth: true
+      url_username: "{{ user_prefix }}{{ item }}"
+      url_password: "{{ user_pass }}"
+      method: POST
+      body_format: json
+      headers: 
+        Content-Type: "application/json"
+      status_code: 201
+      timeout: 10
+      body: "{\"clone_addr\": \"https://github.com/Vizuri/openshift-tasks.git\", \"uid\": {{ item | int + 1 }}, \"repo_name\": \"openshift-tasks\" }"
+    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"

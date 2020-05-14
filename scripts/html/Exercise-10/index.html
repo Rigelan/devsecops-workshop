@@ -1,0 +1,337 @@
+<html>
+  <head>
+    <title>Advanced Container CI/CD Workshop Labs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css">
+    <style>
+      pre {
+        background: grey;
+        color: #fff !important;
+        width: 100%;
+        padding: 5px;
+        max-width: 1000px;
+
+      }
+
+      .content{
+              display:none;
+              margin: 10px;
+      }
+
+      .header{
+        border-bottom: 1px solid #494a5a;
+        padding-bottom: 20px;
+      }
+
+      .student_logins {
+          width:100%;
+          border:1px solid #d3d3d3;
+      }
+      .student_logins div {
+          width:100%;
+      }
+      .student_logins .header {
+          background-color:#d3d3d3;
+          padding: 2px;
+          cursor: pointer;
+          font-weight: bold;
+      }
+      .student_logins .studentx {
+          display: none;
+          padding : 5px;
+      }
+
+      .linklightfooter {
+          background-color: #212121;
+          padding: 80px 0px;
+          font-size: 0.7em;
+          color: #fff;
+          font-weight: 300;
+      }
+
+      section {
+          padding: 40px 0px;
+      }
+
+      body {
+        line-height: 1.5;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      .theme-dark,
+      .theme-dark *{
+          color: #fff;
+      }
+
+      .theme-bg-gray{
+          background-color: #cac8c8;
+      }
+
+      .theme-bg-darkgray{
+          background-color: #a2a1a1;
+      }
+
+      .btn {
+          border-radius: 0px;
+          text-align: center;
+          padding: 10px 20px;
+          margin-bottom: 0px;
+      }
+
+      .btn.btn-block {
+          display: block;
+      }
+
+      .btn.btn-primary,
+      .btn.btn-secondary {
+          background-color: #a2a1a1;
+          color: #fff;
+          padding: 30px;
+      }
+
+      .btn.btn-secondary {
+          background-color: #cac8c8;
+      }
+
+      .btn.btn-ghost{
+          border: 1px solid #fff;
+          color: #fff;
+          background: transparent;
+      }
+
+
+      .page-header {
+          background: #c00;
+          color: #fff;
+          text-align: center;
+      }
+
+      .page-header h1 {
+          font-size: 21px;
+          text-transform: uppercase;
+          font-weight: 400;
+      }
+
+      .page-header h2 {
+          font-size: 1em;
+          font-weight: 300;
+      }
+
+
+      .main-content h1{
+          color: #333;
+      }
+
+      .main-content h2{
+          color: #cc0000;
+      }
+
+      .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
+          color: #c00;
+      }
+
+
+      footer.site-footer{
+          background-color: #212121;
+          padding: 80px 0px;
+          font-size: 0.7em;
+          color: #fff;
+          font-weight: 300;
+      }
+
+
+
+      @media screen and (min-width: 768px){
+
+          .page-header h1 {
+              font-size: 24px;
+          }
+
+          .main-content {
+              font-size: 1.125rem;
+          }
+      }
+
+
+
+      /* theme overrides */
+
+      @media screen and (max-width: 42em){
+          .main-content {
+              padding: 2rem 0px;
+              font-size: 1rem;
+          }
+      }
+
+      @media screen and (max-width: 64em) and (min-width: 42em){
+          .main-content {
+              padding: 2rem 0px;
+              font-size: 1rem;
+          }
+      }
+
+      @media screen and (min-width: 64em){
+          .main-content {
+              max-width: none;
+              font-size: 1.1rem;
+          }
+      }
+
+      a {
+        test-decoration: none;
+      }
+
+
+
+      img[alt="car-thumbnail"] {
+        width: 30vw;
+        height: 30vw;
+        display: inline-block;
+        object-fit: cover;
+      }
+      img[alt="car-thumbnail"] + br {
+        display: none;
+      }
+
+      .column {
+        float: left;
+      }
+
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    </style>
+
+    <script>
+        function copyToClipboard(inputText) {
+
+            if (inputText){
+                var el = document.createElement('textarea');
+                document.body.appendChild(el);
+
+                el.value = inputText;
+
+                /* Copy the text inside the text field */
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }
+
+        }
+    </script>
+  </head>
+  <body>
+
+  <div class="row" style="background-color: #c00;">
+    <div class="column" style="width: 33.33%;"><img src="/images/vizuri_logo_new.png" id="logo" style="height: 80px;"></div>
+    <div class="column" style="padding-top: 30px;width: 60%;"></div>
+    <div class="column" style="padding-top: 30px;"><a href=/>Home</a></div>
+
+  </div>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+          <div class="col-md-8 mx-auto">
+            <h1 class="project-name"> <strong class="text-nowrap">Red Hat DevSecOps Workshop</strong></h1>
+            <h2>This workshop is for demonstrating Red Hat's DevSecOps capabilities through instructor-led exercises.</h2>
+
+              <a href="https://github.com/vizuri/devsecops-workshop" class="btn btn-ghost" target="_blank">View on GitHub</a><br><br>
+          </div>
+      </div>
+    </div>
+  </section>
+
+<h1>Exercise 10 - Deploy to Stage</h1>
+
+<p>In this lab we will be confirming a deployment to staging.   Then we will deploy the task container to our stage project.  </p>
+
+<p><img src="../images/lab10_overview.png" alt="sonar_qube_overview" width="500"></p>
+
+<p>We set an approval to promote to the application to the Stage Project. The approval process is a good feature for various gates of your deployments. We also set a 15 minute timeout on the approval. You also tag the tasks image with latest and the version from the pom file.</p>
+
+<p><img src="../images/lab10_overview2.png" alt="sonar_qube_overview" width="500"></p>
+
+<p>If the deployment config for the application already exists in the Stage Project or Environment the deployment config , service, and route are deleted. This allows for the pipeline to be rerun.</p>
+
+<p>The new-app is recreated in the Stage Environment from the image that you tagged in the previous stage. The image also has a route created for with the svc.expose command.</p>
+
+<p>## Add Promote to Stage Prompt to Pipeline</p>
+
+<p>Copy the following lines and insert them into the Jenkinsfile after the 'Add Lab 10a Here' Comment.</p>
+
+<div class="highlight"><pre lang="">    stage('Promote to STAGE?') {
+      steps {
+        timeout(time:15, unit:'MINUTES') {
+            input message: "Promote to STAGE?", ok: "Promote"
+        }
+
+<pre><code>    script {
+      openshift.withCluster() {
+        openshift.tag("dev-student1/tasks:latest", "stage-student1/tasks:${version}")
+      }
+    }
+  }
+}
+</code></pre>
+
+</pre></div>
+
+<h2>Add Deploy to Stage Prompt to Pipeline</h2>
+
+<p>Copy the following lines and insert them into the Jenkinsfile after the 'Add Lab 10b Here' Comment.</p>
+
+<div class="highlight"><pre lang="">    stage('Deploy STAGE') {
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.withProject("stage-student1") {
+              if (openshift.selector('dc', 'tasks').exists()) {
+                openshift.selector('dc', 'tasks').delete()
+                openshift.selector('svc', 'tasks').delete()
+                openshift.selector('route', 'tasks').delete()
+              }
+
+<pre><code>          openshift.newApp("tasks:${version}").narrow("svc").expose()
+        }
+      }
+    }
+  }
+}
+</code></pre>
+
+</pre></div>
+
+<h2>Commit Changes to Git</h2>
+
+<p>Follow the same procedure outlined in Exercise-3 to commit and push your changes to git.</p>
+
+<h2>Test the Promote to Stage</h2>
+
+<p>From Jenkins, click the 'Build Now' option.  </p>
+
+<p><img src="../images/jenkins_6.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>Your pipeline will stop and wait for you to confirm the deployment to staging.  Hover over the 'Promote to STAGE' box and select 'Proceed' to trigger the deployment to staging. </p>
+
+<p><img src="../images/lab10_1.png" alt="sonarqube_welcome" width="500"> </p>
+
+<p>Verify that the Deploy STAGE step executes sucessfully.</p>
+
+<p><img src="../images/lab10_2.png" alt="sonarqube_welcome" width="500"> </p>
+
+<h2>Verify Task Application is deployed to Stage Project in OpenShift</h2>
+
+<p>Verify that a pod had been created in your OpenShift stage project for you task application.  </p>
+
+<p>Click on the following link. </p>
+
+<p><a href='https://console-openshift-console.apps.ocpws.kee.vizuri.com/k8s/ns/stage-student1/pods'>https://console-openshift-console.apps.ocpws.kee.vizuri.com/k8s/ns/stage-student1/pods</a></p>
+
+<p>You can then launch your development instance with the following URL:</p>
+
+<p><a href='http://tasks-stage-student1.apps.ocpws.kee.vizuri.com'>http://tasks-stage-student1.apps.ocpws.kee.vizuri.com</a></p>
+  </body>
+</html>

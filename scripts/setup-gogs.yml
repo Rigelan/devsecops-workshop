@@ -1,0 +1,14 @@
+---
+- name: Setup GOGS
+  hosts: 127.0.0.1
+  connection: local
+  
+  vars:
+    app_domain: apps.ocpws.kee.vizuri.com
+
+  tasks:
+  - name: Deploy Gogs
+    shell: |
+      oc new-project gogs --description="GOGS" --display-name="GOGS"
+      oc new-app -f openshift/templates/gogs-persistent-template.yaml --param=HOSTNAME=gogs.{{ app_domain }} --param=GOGS_VOLUME_CAPACITY=5Gi
+#      oc create secret generic my-secret --from-file=openshift/files/gogs/ldap_auth.conf

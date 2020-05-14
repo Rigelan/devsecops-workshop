@@ -1,0 +1,95 @@
+---
+- name: Setup CI/CD Workshop Class
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    student_prefix: student
+    #student_prefix: user
+    students_start: 2
+    students_end: 60
+
+  tasks:
+  - name: Create CICD Projects
+    shell: |
+      oc new-project cicd-{{ student_prefix }}{{ item }} --description="CICD Project" --display-name="CICD"
+    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+  - name: Set CICD Project Permissions
+    shell: |
+      oc policy add-role-to-user admin {{ student_prefix }}{{ item}} -n cicd-{{ student_prefix }}{{ item }}
+    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+#  - name: Copy OpenShift Templates
+#    copy:
+#      src: openshift/templates
+#      dest: /tmp/openshift
+
+  - name: Add Jenkins Service Account to Privileged Security Context
+    shell: |
+      oc adm policy add-scc-to-user privileged "system:serviceaccount:cicd-{{ student_prefix }}{{ item }}:jenkins"
+    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+#  - name: Setup for Anchore Deploy
+#    shell: |
+#      oc project "cicd-{{ student_prefix }}{{ item }}"
+#      oc create serviceaccount anchore
+#      oc adm policy add-scc-to-user anyuid system:serviceaccount:cicd-{{ student_prefix }}{{ item }}:anchore
+#    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+#  - name: Copy Registry Certificates
+#    copy:
+#      src: quay-config.json
+#      dest: /tmp
+
+#  - name: Create Quay Secret
+#    shell: |
+#      oc create secret generic quay-registry -n cicd-{{ student_prefix }}{{ item }} \
+#        --from-file=.dockerconfigjson=quay/quay-config.json \
+#        --type=kubernetes.io/dockerconfigjson
+#    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+  - name: Deploy CICD Tools
+    shell: |
+      oc project "cicd-{{ student_prefix }}{{ item }}"
+      #oc create -f openshift/templates/jenkins-slave-cm.yaml
+      oc new-app --template jenkins-ephemeral --name=jenkins -p MEMORY_LIMIT=1Gi -p JENKINS_IMAGE_STREAM_TAG=custom-jenkins:latest
+      oc create -f maven-jenkins-slave-cm.yml 
+      #oc new-app --template jenkins-ephemeral --name=jenkins -p MEMORY_LIMIT=1Gi
+      #oc new-app --template jenkins-ephemeral --name=jenkins -p MEMORY_LIMIT=1Gi -e INSTALL_PLUGINS=gogs:4.2.2,git-client-plugin:3.2.1,anchore-container-scanner,sonar,sonar-quality-gates,xunit
+      #oc new-app -f openshift/templates/jenkins-ephemeral.yaml --name=jenkins -p MEMORY_LIMIT=1Gi -p MEMORY_LIMIT=1Gi -e INSTALL_PLUGINS=anchore-container-scanner,sonar,sonar-quality-gates,xunit
+      #oc new-app -f openshift/templates/nexus3-template.yaml  --param=NEXUS_VERSION=3.12.1 --param=MAX_MEMORY=20Gi
+      oc new-app -f openshift/templates/nexus3-template.yaml  --param=NEXUS_VERSION=3.12.1
+      #oc new-app --template postgresql-ephemeral --name=sonardb -p DATABASE_SERVICE_NAME=sonardb -p POSTGRESQL_USER=sonar -p POSTGRESQL_PASSWORD=sonar -p POSTGRESQL_DATABASE=sonar
+      #oc new-app -f openshift/templates/sonarqube-template.yaml -p SONARQUBE_JDBC_USERNAME=sonar -p SONARQUBE_JDBC_PASSWORD=sonar -p SONARQUBE_JDBC_URL=jdbc:postgresql://sonardb/sonar
+      oc new-app --docker-image=sonarqube:8.3.1-community --name=sonarqube
+      oc expose svc/sonarqube
+    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+#  - name: Link Secret to Default Service Account
+#    shell: |
+#      oc project "cicd-{{ student_prefix }}{{ item }}"
+#      oc secrets link default quay-registry --for=pull
+#      oc secrets link jenkins quay-registry --for=pull
+#    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+#  - name: Deploy Anchore
+#    shell: |
+#      oc project "cicd-{{ student_prefix }}{{ item }}"
+#      oc new-app openshift/templates/anchore.yaml
+#    with_items: "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+
+
+#- name: Copy Root Certificate
+#  hosts: all
+#
+#  tasks:
+#  - name: Create Registry Cert Folder
+#    file: 
+#     path: "/etc/docker/certs.d/quay.{{ app_domain }}"
+#     recurse: yes
+#     state: directory
+#  - name: Copy Registry Certificates
+#    copy:
+#      src: quay/certs/rootCA.crt
+#      dest: /etc/docker/certs.d/quay.{{ app_domain }}/rootCA.crt

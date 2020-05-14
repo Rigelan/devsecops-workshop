@@ -1,0 +1,57 @@
+- name: Setup CI/CD Workshop Class
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    student_prefix: student
+    #student_prefix: user
+    student_pwd: workshop1!
+    environments:
+      - { name: 'dev', display_name: 'Development', description: 'Development' }
+      - { name: 'stage', display_name: 'Staging', description: 'Staging' }
+    students_start: 2
+    students_end: 60
+    app_domain: apps.ocpws.kee.vizuri.com
+
+  tasks:
+  - name: Create Student Projects
+    shell: |
+      #oc new-project {{ student_prefix }}{{ item[0]  }}-{{ item[1].name }}  --description="{{ item[1].display_name }}" --display-name="{{ item[1].description }}"
+      oc new-project {{ item[1].name }}-{{ student_prefix }}{{ item[0] }} --description="{{ item[1].display_name }}" --display-name="{{ item[1].description }}"
+    with_nested:
+      - "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+      - "{{ environments }}"
+
+  - name: Set Student Project Permissions
+    shell: |
+      oc policy add-role-to-user admin {{ student_prefix }}{{ item[0] }} -n {{ item[1].name }}-{{ student_prefix }}{{ item[0] }}
+    with_nested:
+      - "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+      - "{{ environments }}"
+
+  #- name: Create Quay Secret
+  #  shell: |
+  #    oc create secret docker-registry quay-registry -n {{ student_prefix }}{{ item[0] }}-{{ item[1].name }} \
+  #        --docker-username={{ student_prefix }}{{ item[0] }} \
+  #        --docker-password={{ student_pwd }} \
+  #        --docker-email={{ student_prefix }}{{ item[0] }}@vizuri.com \
+  #        --docker-server=quay.{{ app_domain }}
+  #  with_nested:
+  #    - "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+  #    - "{{ environments }}"
+  #
+  #  - name: Link Secret to Default Service Account
+  #  shell: | 
+  #    oc project "{{ student_prefix }}{{ item[0] }}-{{ item[1].name }}"
+  #    oc secrets link default quay-registry --for=pull
+  #  with_nested:
+  #    - "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+  #    - "{{ environments }}"
+
+  - name: Set Jenkins SA Permissions
+    shell: |
+      oc policy add-role-to-user admin system:serviceaccount:cicd-{{ student_prefix }}{{ item[0] }}:jenkins -n {{ item[1].name }}-{{ student_prefix }}{{ item[0] }}
+    with_nested:
+      - "{{ lookup('sequence','start='+students_start|string + ' end='+students_end|string,wantlist=True) }}"
+      - "{{ environments }}"
+
