@@ -7,7 +7,7 @@
   vars:
     aws_region: us-east-1
     students_start: 1
-    students_end: 1
+    students_end: 60
     working_dir: working
     html_dir: html
     workshop_dns_zone: kee.vizuri.com
